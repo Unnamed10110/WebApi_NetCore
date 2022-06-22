@@ -1,0 +1,19 @@
+{
+  "Version": 1,
+  "Hash": "j6sJ7Ou7o3gTnztz71jTb4ISID3IpXJu/oQEN6/tyPE=",
+  "Source": "WebApiAutores",
+  "BasePath": "_content/WebApiAutores",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "WebApiAutores\\wwwroot",
+      "Source": "WebApiAutores",
+      "ContentRoot": "f:\\repos\\c#\\net_core\\WebApiAutores\\wwwroot\\",
+      "BasePath": "_content/WebApiAutores",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": []
+}

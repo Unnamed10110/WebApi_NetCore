@@ -1,0 +1,22 @@
+// paquetes nuget
+microsoft.entityframeworkcore.Tools
+entityfameweork./nombre del motor de bd/
+
+//luego
+ crear el application dbcontext (code first)
+
+ // conectionstring en app settings
+ // agregar servicio (adddbcontext)
+ 
+
+ //migrations (package manager console)
+ add-migrations inicial
+ update-database
+
+
+ // pare resolver los problemas con los DTOs (data transfer object)
+ AutoMapper.Extensions.Microsoft.DependencyInjection
+
+
+ // paquete para el metodo patch
+ NewtonsoftJson
