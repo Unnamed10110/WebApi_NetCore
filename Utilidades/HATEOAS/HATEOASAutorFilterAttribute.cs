@@ -8,12 +8,10 @@ namespace WebApiAutores.Utilidades.HATEOAS
     public class HATEOASAutorFilterAttribute : HATEOASFilterAttribute
     {
         private readonly GeneradorEnlaces generadorEnlaces;
-        private readonly ControllerContext controllerContext;
 
         public HATEOASAutorFilterAttribute(GeneradorEnlaces generadorEnlaces)
         {
             this.generadorEnlaces = generadorEnlaces;
-            this.controllerContext = controllerContext;
         }
 
         public override async Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)

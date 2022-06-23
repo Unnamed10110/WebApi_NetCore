@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "f:\\repos\\c#\\net_core\\WebApiAutores\\WebApiAutores.csproj": {}
+    "F:\\repos\\c#\\net_core\\WebApiAutores\\WebApiAutores.csproj": {}
   },
   "projects": {
-    "f:\\repos\\c#\\net_core\\WebApiAutores\\WebApiAutores.csproj": {
+    "F:\\repos\\c#\\net_core\\WebApiAutores\\WebApiAutores.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "f:\\repos\\c#\\net_core\\WebApiAutores\\WebApiAutores.csproj",
+        "projectUniqueName": "F:\\repos\\c#\\net_core\\WebApiAutores\\WebApiAutores.csproj",
         "projectName": "WebApiAutores",
-        "projectPath": "f:\\repos\\c#\\net_core\\WebApiAutores\\WebApiAutores.csproj",
+        "projectPath": "F:\\repos\\c#\\net_core\\WebApiAutores\\WebApiAutores.csproj",
         "packagesPath": "C:\\Users\\troja\\.nuget\\packages\\",
-        "outputPath": "f:\\repos\\c#\\net_core\\WebApiAutores\\obj\\",
+        "outputPath": "F:\\repos\\c#\\net_core\\WebApiAutores\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

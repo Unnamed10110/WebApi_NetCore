@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "AqDattOedkr0A2qvwqDC0Jq75cJGN0e2myfsX65LKYb0pPPM9r2eocuz9Ou8+1n/bCVOOkVkQ5YbG0yoP44feQ==",
+  "dgSpecHash": "ykqYQfOcIagfbRgr1mAxh+E1jAENj6aWsd/GIs38mRP+mPq856ausCcHch8+XeCXAO7TKzwzWRgVAm0FgtjuKA==",
   "success": true,
-  "projectFilePath": "f:\\repos\\c#\\net_core\\WebApiAutores\\WebApiAutores.csproj",
+  "projectFilePath": "F:\\repos\\c#\\net_core\\WebApiAutores\\WebApiAutores.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\troja\\.nuget\\packages\\automapper\\11.0.0\\automapper.11.0.0.nupkg.sha512",
     "C:\\Users\\troja\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\11.0.0\\automapper.extensions.microsoft.dependencyinjection.11.0.0.nupkg.sha512",
@@ -161,10 +161,10 @@
     "C:\\Users\\troja\\.nuget\\packages\\system.windows.extensions\\4.7.0\\system.windows.extensions.4.7.0.nupkg.sha512",
     "C:\\Users\\troja\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
     "C:\\Users\\troja\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
-    "C:\\Users\\troja\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.4\\microsoft.netcore.app.ref.6.0.4.nupkg.sha512",
-    "C:\\Users\\troja\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.4\\microsoft.windowsdesktop.app.ref.6.0.4.nupkg.sha512",
+    "C:\\Users\\troja\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.4\\microsoft.netcore.app.host.win-x64.6.0.4.nupkg.sha512",
     "C:\\Users\\troja\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.4\\microsoft.aspnetcore.app.ref.6.0.4.nupkg.sha512",
-    "C:\\Users\\troja\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.4\\microsoft.netcore.app.host.win-x64.6.0.4.nupkg.sha512"
+    "C:\\Users\\troja\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.4\\microsoft.windowsdesktop.app.ref.6.0.4.nupkg.sha512",
+    "C:\\Users\\troja\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.4\\microsoft.netcore.app.ref.6.0.4.nupkg.sha512"
   ],
   "logs": []
 }

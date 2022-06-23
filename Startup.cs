@@ -149,7 +149,8 @@ namespace WebApiAutores
                 });
             });
 
-            //services.AddTransient<MiFiltroDeAccion>(); // registrar el servicio filtro en el sistema de inyeccion de dependencias
+            //services.AddTransient<
+            //>(); // registrar el servicio filtro en el sistema de inyeccion de dependencias
 
             //services.AddHostedService<EscribirEnArchivo>(); // servicio que escribe en archivo
 
