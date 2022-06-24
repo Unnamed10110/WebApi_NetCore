@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "oUsTc5M7TS1Owyu17cx5Wuy+f3dQmh0cHRFyXEcbkBc=",
+  "Hash": "j6sJ7Ou7o3gTnztz71jTb4ISID3IpXJu/oQEN6/tyPE=",
   "Source": "WebApiAutores",
   "BasePath": "_content/WebApiAutores",
   "Mode": "Default",
@@ -10,7 +10,7 @@
     {
       "Name": "WebApiAutores\\wwwroot",
       "Source": "WebApiAutores",
-      "ContentRoot": "F:\\repos\\c#\\net_core\\WebApiAutores\\wwwroot\\",
+      "ContentRoot": "f:\\repos\\c#\\net_core\\WebApiAutores\\wwwroot\\",
       "BasePath": "_content/WebApiAutores",
       "Pattern": "**"
     }
