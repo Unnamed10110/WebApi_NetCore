@@ -21,7 +21,8 @@ namespace WebApiAutores.Utilidades.HATEOAS
             {
                 Name = "incluirHATEOAS",
                 In = ParameterLocation.Header,
-                Required = false
+                Schema = new OpenApiSchema() { Type = "boolean" },
+                Required = false,
             });
         }
     }

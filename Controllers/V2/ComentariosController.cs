@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -35,8 +36,15 @@ namespace WebApiAutores.Controllers.V2
                 return NotFound();
             }
             var queryable = context.Comentarios.Where(comentarioDB => comentarioDB.LibroId == libroId).AsQueryable();
-            await HttpContext.InsertarParametrosPaginacionEnCabecera(queryable);
-            var comentarios = await queryable.OrderBy(comentario => comentario.Id).Paginar(paginacionDTO).ToListAsync();
+            //await HttpContext.InsertarParametrosPaginacionEnCabecera(queryable);
+
+
+            double cantidad = await queryable.CountAsync();
+            HttpContext.Response.Headers.Add("cantidadTotalRegistros", cantidad.ToString());
+
+            //var comentarios = await queryable.OrderBy(comentario => comentario.Id).Paginar(paginacionDTO).ToListAsync();
+
+            var comentarios= queryable.Skip((paginacionDTO.Pagina - 1) * paginacionDTO.RecordsPorPagina).Take(paginacionDTO.RecordsPorPagina);
 
             if (context.Comentarios.Where(comentarioDB => comentarioDB.LibroId == libroId).Count() == 0)
             {

@@ -13,25 +13,25 @@ namespace WebApiAutores.Utilidades
             // AUTORES
             // con el formember se define con que campo se mapea, si tienen nombres diferentes
             // GET
-            CreateMap<Autor, AutorDTO>().ForMember(d => d.NombreCompleto, o => o.MapFrom(s => s.Nombre));
-            CreateMap<Autor, AutorDTOConLibros>().ForMember(d => d.Libros, o => o.MapFrom(MapAutorDTOLibros));
+            CreateMap<Autor, AutorDTO>().ForMember(destino => destino.NombreCompleto, origen => origen.MapFrom(s => s.Nombre));
+            CreateMap<Autor, AutorDTOConLibros>().ForMember(destino => destino.Libros, origen => origen.MapFrom(MapAutorDTOLibros));
 
             // POST
             CreateMap<AutorCreacionDTO, Autor>()
-                .ForMember(d => d.Nombre, o => o.MapFrom(s => s.NombreCompleto))
-                .ForMember(a=>a.Nombre, o=>o.MapFrom(c=>c.NombreCompleto));
+                .ForMember(destino => destino.Nombre, origen => origen.MapFrom(s => s.NombreCompleto))
+                .ForMember(destino => destino.Nombre, origen => origen.MapFrom(c=>c.NombreCompleto));
 
             // PUT
-            CreateMap<AutorDTOPUT, Autor>().ForMember(d=>d.Nombre, o=>o.MapFrom(s=>s.NombreCompleto));
+            CreateMap<AutorDTOPUT, Autor>().ForMember(destino => destino.Nombre, origen => origen.MapFrom(s=>s.NombreCompleto));
 
             
             // LIBROS
             // GET libro
             CreateMap<Libro, LibroDTO>();
-            CreateMap<Libro, LibroDTOConAutores>().ForMember(LibroDTO => LibroDTO.Autores, o => o.MapFrom(MapLibroDTOAutores));
+            CreateMap<Libro, LibroDTOConAutores>().ForMember(LibroDTO => LibroDTO.Autores, origen => origen.MapFrom(MapLibroDTOAutores));
             
             // POST libro
-            CreateMap<LibroCreacionDTO, Libro>().ForMember(a=>a.AutoresLibros,o=>o.MapFrom(MapAutoresLibros));
+            CreateMap<LibroCreacionDTO, Libro>().ForMember(destino => destino.AutoresLibros, origen => origen.MapFrom(MapAutoresLibros));
 
             // PUT PARCIAL libro
             CreateMap<LibroPutParcialDTO, Libro>();
@@ -39,10 +39,10 @@ namespace WebApiAutores.Utilidades
 
             // COMENTARIOS
             // POST comentario
-            CreateMap<ComentarioCreacionDTO, Comentario>().ForMember(a => a.Contenido, b => b.MapFrom(c=>c.ContenidoLibro));
+            CreateMap<ComentarioCreacionDTO, Comentario>().ForMember(destino => destino.Contenido, origen => origen.MapFrom(c=>c.ContenidoLibro));
 
             // GET comentario
-            CreateMap<Comentario, ComentarioDTO>().ForMember(a => a.ContenidoComentario, o => o.MapFrom(c=>c.Contenido));
+            CreateMap<Comentario, ComentarioDTO>().ForMember(destino => destino.ContenidoComentario, origen => origen.MapFrom(c=>c.Contenido));
 
 
 
@@ -55,18 +55,18 @@ namespace WebApiAutores.Utilidades
 
 
         // GET Autores (member: List<LibroDTO> Libros)
-        // List<AutorLibro> AutoresLibros -> List<LibroDTO>
+        // List<AutorLibro> AutorLibros -> List<LibroDTO>
         // CreateMap<Autor, AutorDTOConLibros>().ForMember(d => d.Libros, o => o.MapFrom(MapAutorDTOLibros));
         private List<LibroDTO> MapAutorDTOLibros(Autor autor, AutorDTO autorDTO)
         {
             var resultado = new List<LibroDTO>();
 
-            if (autor.AutoresLibros == null)
+            if (autor.AutorLibros == null)
             {
                 return resultado;
             }
 
-            foreach(var autorlibro in autor.AutoresLibros)
+            foreach(var autorlibro in autor.AutorLibros)
             {
                 resultado.Add(new LibroDTO()
                 {
@@ -80,7 +80,7 @@ namespace WebApiAutores.Utilidades
 
 
         // GET libro (member: List<AutorDTO> Autores)
-        // List<AutorLibro> AutoresLibros -> List<AutorDTO>
+        // List<AutorLibro> AutorLibros -> List<AutorDTO>
         // CreateMap<Libro, LibroDTOConAutores>().ForMember(LibroDTO => LibroDTO.Autores, o => o.MapFrom(MapLibroDTOAutores));
         private List<AutorDTO> MapLibroDTOAutores(Libro libro, LibroDTO libroDTO)
         {
@@ -105,8 +105,8 @@ namespace WebApiAutores.Utilidades
         }
 
 
-        // POST libro (member: List<AutorLibro> AutoresLibros)
-        // List<int> AutoresIds -> List<AutorLibro> AutoresLibros
+        // POST libro (member: List<AutorLibro> AutorLibros)
+        // List<int> AutoresIds -> List<AutorLibro> AutorLibros
         private List<AutorLibro> MapAutoresLibros(LibroCreacionDTO librocreacionDTO, Libro libro)
         {
             var resultado = new List<AutorLibro>();
