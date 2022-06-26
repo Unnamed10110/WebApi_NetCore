@@ -23,7 +23,7 @@ namespace WebApiAutores.Utilidades.HATEOAS
 
             var valor = cabecera[0];
 
-            if (!valor.Equals("Y", StringComparison.InvariantCultureIgnoreCase))
+            if (!valor.Equals("true", StringComparison.InvariantCultureIgnoreCase))
             {
                 return false;
             }

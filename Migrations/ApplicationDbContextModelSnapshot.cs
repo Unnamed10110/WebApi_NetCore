@@ -251,7 +251,7 @@ namespace WebApiAutores.Migrations
 
                     b.HasIndex("LibroId");
 
-                    b.ToTable("AutoresLibros");
+                    b.ToTable("AutorLibros");
                 });
 
             modelBuilder.Entity("WebApiAutores.Entidades.Comentario", b =>
@@ -354,13 +354,13 @@ namespace WebApiAutores.Migrations
             modelBuilder.Entity("WebApiAutores.Entidades.AutorLibro", b =>
                 {
                     b.HasOne("WebApiAutores.Entidades.Autor", "Autor")
-                        .WithMany("AutoresLibros")
+                        .WithMany("AutorLibros")
                         .HasForeignKey("AutorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("WebApiAutores.Entidades.Libro", "Libro")
-                        .WithMany("AutoresLibros")
+                        .WithMany("AutorLibros")
                         .HasForeignKey("LibroId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -389,12 +389,12 @@ namespace WebApiAutores.Migrations
 
             modelBuilder.Entity("WebApiAutores.Entidades.Autor", b =>
                 {
-                    b.Navigation("AutoresLibros");
+                    b.Navigation("AutorLibros");
                 });
 
             modelBuilder.Entity("WebApiAutores.Entidades.Libro", b =>
                 {
-                    b.Navigation("AutoresLibros");
+                    b.Navigation("AutorLibros");
 
                     b.Navigation("Comentarios");
                 });

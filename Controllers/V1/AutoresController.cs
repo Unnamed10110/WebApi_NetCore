@@ -66,7 +66,7 @@ namespace WebApiAutores.Controllers.V1
         [HttpGet(Name = "obtenerAutoresv1")] // api/autores
         [AllowAnonymous]
         [ServiceFilter(typeof(HATEOASAutorFilterAttribute))]
-        //public async Task<ActionResult> Get([FromQuery] bool incluirHATEOAS=true)
+        //public async Task<ActionResult> Get([FromQuery] bool incluirHATEOAS=true,[FromQuery] PaginacionDTO paginacionDTO)
         //public async Task<ActionResult<List<AutorDTO>>> Get([FromHeader] string incluirHATEOAS)
         public async Task<ActionResult<List<AutorDTO>>> Get([FromQuery] PaginacionDTO paginacionDTO)
         {
@@ -159,7 +159,7 @@ namespace WebApiAutores.Controllers.V1
         public async Task<ActionResult<AutorDTOConLibros>> Get(int id/*, string param2*/, [FromHeader] string incluirHATEOAS)
         {
             var autor = await context.Autores
-                .Include(x => x.AutoresLibros)
+                .Include(x => x.AutorLibros)
                 .ThenInclude(a => a.Libro)
                 .FirstOrDefaultAsync(x => x.Id == id);
             if (autor == null)

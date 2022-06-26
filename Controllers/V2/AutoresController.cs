@@ -13,6 +13,7 @@ using WebApiAutores.Utilidades;
 using WebApiAutores.DTOs.DTOBase;
 using WebApiAutores.Utilidades.HATEOAS;
 using WebApiAutores.Utilidades.HEADERS;
+using WebApiAutores.DTOs.DTOPaginacion;
 
 // mensajes de error-> Tipos:
 // Critical - Error - Warning - Information - Debug - Trace
@@ -89,7 +90,7 @@ namespace WebApiAutores.Controllers.V2
         [ServiceFilter(typeof(HATEOASAutorFilterAttribute))]
         //public async Task<ActionResult> Get([FromQuery] bool incluirHATEOAS=true)
         //public async Task<ActionResult<List<AutorDTO>>> Get([FromHeader] string incluirHATEOAS)
-        public async Task<ActionResult<List<AutorDTO>>> Get()
+        public async Task<ActionResult<List<AutorDTO>>> Get([FromQuery] PaginacionDTO paginacionDTO)
         {
             //throw new NotImplementedException();
             //logger.LogInformation("++++++++++++++++++++++++Obteniendo Autores (information log).++++++++++++++++++++++++++++");
@@ -119,9 +120,18 @@ namespace WebApiAutores.Controllers.V2
             //return Ok(dtos);
 
 
-            var autores = await context.Autores/*.Include(x => x.Libros)*/.ToListAsync();
-            autores.ForEach(autor => autor.Nombre=autor.Nombre.ToUpper());
-            return mapper.Map<List<AutorDTO>>(autores.OrderBy(x => x.Id).ToList());
+            //var autores = await context.Autores/*.Include(x => x.Libros)*/.ToListAsync();
+            //autores.ForEach(autor => autor.Nombre=autor.Nombre.ToUpper());
+
+            var queryable = context.Autores.AsQueryable();
+
+            double cantidad = await queryable.CountAsync();
+            HttpContext.Response.Headers.Add("cantidadTotalRegistros", cantidad.ToString());
+
+            var autores2= queryable.Skip((paginacionDTO.Pagina - 1) * paginacionDTO.RecordsPorPagina).Take(paginacionDTO.RecordsPorPagina);
+            await autores2.ForEachAsync(x => x.Nombre = x.Nombre.ToUpper());
+
+            return mapper.Map<List<AutorDTO>>(autores2.OrderBy(x => x.Id).ToList());
 
 
         }
@@ -173,7 +183,7 @@ namespace WebApiAutores.Controllers.V2
         public async Task<ActionResult<AutorDTOConLibros>> Get(int id/*, string param2*/, [FromHeader] string incluirHATEOAS)
         {
             var autor = await context.Autores
-                .Include(x => x.AutoresLibros)
+                .Include(x => x.AutorLibros)
                 .ThenInclude(a => a.Libro)
                 .FirstOrDefaultAsync(x => x.Id == id);
             if (autor == null)
@@ -196,6 +206,7 @@ namespace WebApiAutores.Controllers.V2
 
 
         [HttpPost(Name = "crearAutorv2")]
+        [AllowAnonymous]
         public async Task<ActionResult> Post([FromBody] AutorCreacionDTO autorCreacionDTO)
         {
             var existeAutorMismoNombre = await context.Autores.AnyAsync(x => x.Nombre == autorCreacionDTO.NombreCompleto);

@@ -11,7 +11,7 @@ namespace WebApiAutores.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AutoresLibros",
+                name: "AutorLibros",
                 columns: table => new
                 {
                     LibroId = table.Column<int>(type: "integer", nullable: false),
@@ -37,7 +37,7 @@ namespace WebApiAutores.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_AutoresLibros_LibroId",
-                table: "AutoresLibros",
+                table: "AutorLibros",
                 column: "LibroId");
         }
 
@@ -45,7 +45,7 @@ namespace WebApiAutores.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AutoresLibros");
+                name: "AutorLibros");
         }
     }
 }
