@@ -188,7 +188,11 @@ namespace WebApiAutores.Controllers.V1
 
             if (existeAutorMismoNombre)
             {
-                return BadRequest($"Ya existe un autor con el nombre {autorCreacionDTO.NombreCompleto}");
+                return BadRequest(new
+                {
+                    id=1,
+                    erroMessage="Error - Ya existe un autor con ese nombre"
+                });//$"Ya existe un autor con el nombre {autorCreacionDTO.NombreCompleto}");
             }
 
             // el dto no se le puede pasar a EF por lo que se crea el tipo valido con los datos del DTO
