@@ -43,7 +43,7 @@ namespace WebApiAutores.Controllers.V1
             this.context = context;
             this.mapper = mapper;
             this.configuration = configuration;
-            this.authorizationService = authorizationService;
+            this.authorizationService = authorizationService;// comment
 
         }
 
