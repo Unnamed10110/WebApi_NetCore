@@ -9,5 +9,7 @@ namespace WebApiAutores.DTOs.DTOBase
         [StringLength(maximumLength: 200, ErrorMessage = "El campo {0} no debe tener más de {1} caracteres.")]
         [PrimeraLetraMayuscula] // validacion desde la clase de validaciones
         public string NombreCompleto { get; set; }
+
+        public IFormFile Imagen { get; set; }
     }
 }

@@ -13,6 +13,8 @@ namespace WebApiAutores.Entidades
         [PrimeraLetraMayuscula] // validacion desde la clase de validaciones
         public string Nombre { get; set; }
 
+        public string Imagen { get; set; }
+
         public List<AutorLibro> AutorLibros { get; set; }
 
 

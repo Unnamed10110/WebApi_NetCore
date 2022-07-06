@@ -10,6 +10,8 @@ namespace WebApiAutores.DTOs.DTOBase
         public int Id { get; set; }
         public string NombreCompleto { get; set; }
 
+        public IFormFile Imagen { get; set; }
+
 
     }
 
