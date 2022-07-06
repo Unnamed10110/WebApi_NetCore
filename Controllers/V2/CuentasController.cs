@@ -100,7 +100,7 @@ namespace WebApiAutores.Controllers.V2
 
             if (resultado.Succeeded)
             {
-                return await ContruirToken(credencialesUsuario);
+                return await ConstruirToken(credencialesUsuario);
             }
             else
             {
@@ -117,7 +117,7 @@ namespace WebApiAutores.Controllers.V2
 
             if (resultado.Succeeded)
             {
-                return await ContruirToken(credencialesUsuario);
+                return await ConstruirToken(credencialesUsuario);
             }
             else
             {
@@ -144,12 +144,12 @@ namespace WebApiAutores.Controllers.V2
                 Email = email,
             };
 
-            return await ContruirToken(credenciales);
+            return await ConstruirToken(credenciales);
         }
 
 
 
-        private async Task<RespuestaAutenticacion> ContruirToken(CredencialesUsuario credencialesUsuario)
+        private async Task<RespuestaAutenticacion> ConstruirToken(CredencialesUsuario credencialesUsuario)
         {
             var claims = new List<Claim>
             {
