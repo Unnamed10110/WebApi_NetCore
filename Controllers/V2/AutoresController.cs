@@ -31,6 +31,8 @@ namespace WebApiAutores.Controllers.V2
         private readonly IMapper mapper;
         private readonly IConfiguration configuration;
         private readonly IAuthorizationService authorizationService;
+        private readonly IWebHostEnvironment env;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
         //private readonly IServicio servicio;
         //private readonly ServicioTransient servicioTransient;
@@ -41,12 +43,14 @@ namespace WebApiAutores.Controllers.V2
         // inyeccion de dependencias
         public AutoresController(ApplicationDbContext context/*, IServicio servicio, ServicioTransient servicioTransient,
             ServicioScoped servicioScoped, ServicioSingleton servicioSingleton, ILogger<AutoresController> logger*/, IMapper mapper, IConfiguration configuration,
-            IAuthorizationService authorizationService)
+            IAuthorizationService authorizationService, IWebHostEnvironment env, IHttpContextAccessor httpContextAccessor)
         {
             this.context = context;
             this.mapper = mapper;
             this.configuration = configuration;
             this.authorizationService = authorizationService;
+            this.env = env;
+            this.httpContextAccessor = httpContextAccessor;
             //this.servicio = servicio;
             //this.servicioTransient = servicioTransient;
             //this.servicioScoped = servicioScoped;
@@ -207,13 +211,17 @@ namespace WebApiAutores.Controllers.V2
 
         [HttpPost(Name = "crearAutorv2")]
         [AllowAnonymous]
-        public async Task<ActionResult> Post([FromBody] AutorCreacionDTO autorCreacionDTO)
+        public async Task<ActionResult> Post([FromForm] AutorCreacionDTO autorCreacionDTO)
         {
             var existeAutorMismoNombre = await context.Autores.AnyAsync(x => x.Nombre == autorCreacionDTO.NombreCompleto);
 
             if (existeAutorMismoNombre)
             {
-                return BadRequest($"Ya existe un autor con el nombre {autorCreacionDTO.NombreCompleto}");
+                return BadRequest(new
+                {
+                    id = 1,
+                    erroMessage = "Error - Ya existe un autor con ese nombre"
+                });//$"Ya existe un autor con el nombre {autorCreacionDTO.NombreCompleto}");
             }
 
             // el dto no se le puede pasar a EF por lo que se crea el tipo valido con los datos del DTO
@@ -225,6 +233,33 @@ namespace WebApiAutores.Controllers.V2
             // otra solucion al dto es usar el objeto mapper (instalar por nuget)
             var autor = mapper.Map<Autor>(autorCreacionDTO);
 
+            if (autorCreacionDTO.Imagen != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await autorCreacionDTO.Imagen.CopyToAsync(memoryStream);
+                    var contenido = memoryStream.ToArray();
+                    var extension = Path.GetExtension(autorCreacionDTO.Imagen.FileName);
+
+                    var nombreArchivo = $"{Guid.NewGuid()}{extension}";
+                    string folder = Path.Combine(env.WebRootPath, "autores");
+
+                    if (!Directory.Exists(folder))
+                    {
+                        Directory.CreateDirectory(folder);
+                    }
+
+                    string ruta = Path.Combine(folder, nombreArchivo);
+                    //await File.WriteAllBytesAsync(ruta, contenido);
+                    await autorCreacionDTO.Imagen.CopyToAsync(new FileStream(ruta, FileMode.Create));
+
+                    var urlActual = $"{httpContextAccessor.HttpContext.Request.Scheme}://{httpContextAccessor.HttpContext.Request.Host}";
+                    var urlParaBD = Path.Combine(urlActual, "autores", nombreArchivo).Replace("\\", "/");
+                    autor.Imagen = urlParaBD;
+
+                }
+            }
+
             context.Add(autor);
             await context.SaveChangesAsync();
 
@@ -234,6 +269,7 @@ namespace WebApiAutores.Controllers.V2
             //return Ok();
 
         }
+
 
         //actualizar
         [HttpPut("{id:int}", Name = "actualizarAutorv2")] // api/autores/1
@@ -256,6 +292,33 @@ namespace WebApiAutores.Controllers.V2
             //    Id= id,
             //};
             var autor2 = mapper.Map<Autor>(autorDTOPut);
+
+            if (autorDTOPut.Imagen != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await autorDTOPut.Imagen.CopyToAsync(memoryStream);
+                    var contenido = memoryStream.ToArray();
+                    var extension = Path.GetExtension(autorDTOPut.Imagen.FileName);
+
+                    var nombreArchivo = $"{Guid.NewGuid()}{extension}";
+                    string folder = Path.Combine(env.WebRootPath, "autores");
+
+                    if (!Directory.Exists(folder))
+                    {
+                        Directory.CreateDirectory(folder);
+                    }
+
+                    string ruta = Path.Combine(folder, nombreArchivo);
+                    //await File.WriteAllBytesAsync(ruta, contenido);
+                    await autorDTOPut.Imagen.CopyToAsync(new FileStream(ruta, FileMode.Create));
+
+                    var urlActual = $"{httpContextAccessor.HttpContext.Request.Scheme}://{httpContextAccessor.HttpContext.Request.Host}";
+                    var urlParaBD = Path.Combine(urlActual, "autores", nombreArchivo).Replace("\\", "/");
+                    autor2.Imagen = urlParaBD;
+
+                }
+            }
 
             context.Update(autor2);
 

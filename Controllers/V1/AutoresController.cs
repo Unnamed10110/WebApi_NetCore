@@ -34,17 +34,20 @@ namespace WebApiAutores.Controllers.V1
         private readonly IMapper mapper;
         private readonly IConfiguration configuration;
         private readonly IAuthorizationService authorizationService;
-
+        private readonly IWebHostEnvironment env;
+        private readonly AlmacenadorArchivosLocal almacenadorArchivosLocal;
+        private readonly string contenedor = "autores";
 
         // inyeccion de dependencias
         public AutoresController(ApplicationDbContext context, IMapper mapper, IConfiguration configuration,
-            IAuthorizationService authorizationService)
+            IAuthorizationService authorizationService, IWebHostEnvironment env, AlmacenadorArchivosLocal almacenadorArchivosLocal)
         {
             this.context = context;
             this.mapper = mapper;
             this.configuration = configuration;
             this.authorizationService = authorizationService;// comment
-
+            this.env = env;
+            this.almacenadorArchivosLocal = almacenadorArchivosLocal;
         }
 
 
@@ -182,7 +185,8 @@ namespace WebApiAutores.Controllers.V1
 
 
         [HttpPost(Name = "crearAutorv1")]
-        public async Task<ActionResult> Post([FromBody] AutorCreacionDTO autorCreacionDTO)
+        [AllowAnonymous]
+        public async Task<ActionResult> Post([FromForm] AutorCreacionDTO autorCreacionDTO)
         {
             var existeAutorMismoNombre = await context.Autores.AnyAsync(x => x.Nombre == autorCreacionDTO.NombreCompleto);
 
@@ -204,6 +208,17 @@ namespace WebApiAutores.Controllers.V1
             // otra solucion al dto es usar el objeto mapper (instalar por nuget)
             var autor = mapper.Map<Autor>(autorCreacionDTO);
 
+            if (autorCreacionDTO.Imagen != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await autorCreacionDTO.Imagen.CopyToAsync(memoryStream);
+                    var contenido = memoryStream.ToArray();
+                    var extension = Path.GetExtension(autorCreacionDTO.Imagen.FileName);
+                    autor.Imagen = await almacenadorArchivosLocal.GuardarArchivo(contenido, extension, contenedor, autorCreacionDTO.Imagen.ContentType);
+                }
+            }
+
             context.Add(autor);
             await context.SaveChangesAsync();
 
@@ -216,7 +231,8 @@ namespace WebApiAutores.Controllers.V1
 
         //actualizar
         [HttpPut("{id:int}", Name = "actualizarAutorv1")] // api/autores/1
-        public async Task<ActionResult> Put(AutorDTOPUT autorDTOPut, int id)
+        [AllowAnonymous]
+        public async Task<ActionResult> Put([FromForm]AutorDTOPUT autorDTOPut, int id)
         {
             var existe = await context.Autores.AnyAsync(x => x.Id == id);
             if (!existe)
@@ -235,7 +251,16 @@ namespace WebApiAutores.Controllers.V1
             //    Id= id,
             //};
             var autor2 = mapper.Map<Autor>(autorDTOPut);
-
+            if (autorDTOPut.Imagen != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await autorDTOPut.Imagen.CopyToAsync(memoryStream);
+                    var contenido = memoryStream.ToArray();
+                    var extension = Path.GetExtension(autorDTOPut.Imagen.FileName);
+                    autor2.Imagen = await almacenadorArchivosLocal.GuardarArchivo(contenido, extension, contenedor, autorDTOPut.Imagen.ContentType);
+                }
+            }
             context.Update(autor2);
 
             await context.SaveChangesAsync();

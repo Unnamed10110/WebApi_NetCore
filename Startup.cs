@@ -206,6 +206,9 @@ namespace WebApiAutores
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
 
+            services.AddTransient<AlmacenadorArchivosLocal>();
+            services.AddHttpContextAccessor();
+
 
         }
 
