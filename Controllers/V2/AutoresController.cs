@@ -232,7 +232,7 @@ namespace WebApiAutores.Controllers.V2
 
             // otra solucion al dto es usar el objeto mapper (instalar por nuget)
             var autor = mapper.Map<Autor>(autorCreacionDTO);
-
+            // comment in main
             if (autorCreacionDTO.Imagen != null)
             {
                 using (var memoryStream = new MemoryStream())
