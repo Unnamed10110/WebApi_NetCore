@@ -67,7 +67,7 @@ namespace WebApiAutores.Controllers.V1
         /// </summary>
         /// <returns></returns>
         [HttpGet(Name = "obtenerAutoresv1")] // api/autores
-        [AllowAnonymous]
+        //[AllowAnonymous]
         [ServiceFilter(typeof(HATEOASAutorFilterAttribute))]
         //public async Task<ActionResult> Get([FromQuery] bool incluirHATEOAS=true,[FromQuery] PaginacionDTO paginacionDTO)
         //public async Task<ActionResult<List<AutorDTO>>> Get([FromHeader] string incluirHATEOAS)

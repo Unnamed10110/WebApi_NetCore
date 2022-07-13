@@ -13,5 +13,13 @@ namespace WebApiAutores.DTOs.DTOBase
 
         public DateTime FechaPublicacion { get; set; }
 
+
+        // model binders personalizados
+        //[ModelBinder(BinderType = typeof(ModelBinderPersonalizado<List<int>>))]
+        //public List<int> GenerosIDs { get; set; }
+
+        //[ModelBinder(BinderType = typeof(ModelBinderPersonalizado<List<ActorPeliculasCreacionDTO>>))]
+        //public List<ActorPeliculasCreacionDTO> Actores { get; set; }
+
     }
 }

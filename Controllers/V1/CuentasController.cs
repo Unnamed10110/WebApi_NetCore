@@ -151,13 +151,16 @@ namespace WebApiAutores.Controllers.V1
 
         private async Task<RespuestaAutenticacion> ContruirToken(CredencialesUsuario credencialesUsuario)
         {
+            
+
+            var usuario = await userManager.FindByEmailAsync(credencialesUsuario.Email);
+
             var claims = new List<Claim>
             {
                 new Claim("email",credencialesUsuario.Email),
                 new Claim("otro claim","otro valor"),
+                new Claim("UsuarioId", usuario.Id)
             };
-
-            var usuario = await userManager.FindByEmailAsync(credencialesUsuario.Email);
 
             var claimsDB = await userManager.GetClaimsAsync(usuario);
 
