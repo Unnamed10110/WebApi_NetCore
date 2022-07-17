@@ -7,9 +7,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using WebApiAutores.Controllers;
 using WebApiAutores.Filtros;
@@ -18,6 +21,7 @@ using WebApiAutores.Servicios;
 using WebApiAutores.Utilidades;
 using WebApiAutores.Utilidades.HATEOAS;
 using WebApiAutores.Utilidades.HEADERS;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace WebApiAutores
 {
@@ -179,6 +183,32 @@ namespace WebApiAutores
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["llavejwt"])),
                         ClockSkew = TimeSpan.Zero,
                     };
+                    opciones.Events = new JwtBearerEvents
+                    {
+                        OnChallenge = async context =>
+                        {
+                            // Call this to skip the default logic and avoid using the default response
+                            context.HandleResponse();
+
+                            // Write to the response in any way you wish
+                            context.Response.StatusCode = 401;
+                            context.Response.Headers.Append("my-custom-header", "custom-value");
+
+                            var firbida = new
+                            {
+                                error=context.Response.StatusCode,
+                                message = "Credenciales Invalidas"
+                            };
+                            var json = JsonSerializer.Serialize(firbida);
+
+                            Console.Write(json+"----------");
+                            await context.Response.WriteAsync(json);
+
+
+                        }
+                    };
+
+
                 }); // usar autenticacion (filtro)
 
             services.AddAuthorization(opciones =>

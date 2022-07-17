@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using WebApiAutores.DTOs;
 using WebApiAutores.DTOs.DTOBase;
 using WebApiAutores.DTOs.DTOPaginacion;
 using WebApiAutores.Entidades;
@@ -95,6 +97,7 @@ namespace WebApiAutores.Controllers.V1
 
 
         [HttpPut("{id:int}", Name = "actualizarComentario")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> Put(int libroId, int id, ComentarioCreacionDTO comentarioCreacionDTO)
         {
             var existeLibro = await context.Libros.AnyAsync(x => x.Id == libroId);
@@ -110,14 +113,30 @@ namespace WebApiAutores.Controllers.V1
                 return NotFound("No existe el comentario con ese id.");
             }
 
+            var usuarioId = HttpContext.User.Claims.Where(x => x.Type == "UsuarioId").FirstOrDefault().Value;
 
+            
             var comentario = mapper.Map<Comentario>(comentarioCreacionDTO);
-            comentario.Id = id;
-            comentario.LibroId = libroId;
 
-            context.Update(comentario);
-            await context.SaveChangesAsync();
-            return Ok();
+            if (comentario.UsuarioId == usuarioId)
+            {
+                comentario.Id = id;
+                comentario.LibroId = libroId;
+
+
+                context.Update(comentario);
+                await context.SaveChangesAsync();
+                return Ok();
+            }
+            else
+            {
+                var a = new ForbidDTO() { Error = 403, Mensaje = "No le pertenece este comentario." };
+                //var json = JsonConvert.SerializeObject(ForbidDTO);
+
+                
+                return new ObjectResult(a) { StatusCode = 403 };
+            }
+
 
         }
     }
