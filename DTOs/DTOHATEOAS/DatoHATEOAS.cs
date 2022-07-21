@@ -2,7 +2,7 @@
 
 namespace WebApiAutores.DTOs.DTOHATEOAS
 {
-    [DataContract]
+    //[DataContract]
     public class DatoHATEOAS
     {
         public string Enlace { get; private set; }
