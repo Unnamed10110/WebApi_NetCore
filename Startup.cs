@@ -54,7 +54,7 @@ namespace WebApiAutores
             }).AddJsonOptions(x =>
             {
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;// ignorar ciclos de referencias/json
-            }).AddNewtonsoftJson();
+            }).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
             // sql server
             //services.AddDbContext<ApplicationDbContext>(options =>
             //    options.UseSqlServer(Configuration.GetConnectionString("defaultConnection")));
