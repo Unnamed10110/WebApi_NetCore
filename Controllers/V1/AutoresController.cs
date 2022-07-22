@@ -36,11 +36,16 @@ namespace WebApiAutores.Controllers.V1
         private readonly IAuthorizationService authorizationService;
         private readonly IWebHostEnvironment env;
         private readonly AlmacenadorArchivosLocal almacenadorArchivosLocal;
+        private readonly ServicioTransient servicioTransient;
+        private readonly ServicioScoped servicioScoped;
+        private readonly ServicioSingleton servicioSingleton;
+        private readonly IServicio servicio;
         private readonly string contenedor = "autores";
 
         // inyeccion de dependencias
         public AutoresController(ApplicationDbContext context, IMapper mapper, IConfiguration configuration,
-            IAuthorizationService authorizationService, IWebHostEnvironment env, AlmacenadorArchivosLocal almacenadorArchivosLocal)
+            IAuthorizationService authorizationService, IWebHostEnvironment env, AlmacenadorArchivosLocal almacenadorArchivosLocal, ServicioTransient servicioTransient,
+            ServicioScoped servicioScoped, ServicioSingleton servicioSingleton, IServicio servicio)
         {
             this.context = context;
             this.mapper = mapper;
@@ -48,8 +53,27 @@ namespace WebApiAutores.Controllers.V1
             this.authorizationService = authorizationService;// comment
             this.env = env;
             this.almacenadorArchivosLocal = almacenadorArchivosLocal;
+            this.servicioTransient = servicioTransient;
+            this.servicioScoped = servicioScoped;
+            this.servicioSingleton = servicioSingleton;
+            this.servicio = servicio;
         }
 
+        [AllowAnonymous]
+        [HttpGet("/api/v1/autores/GUID")]
+        public ActionResult GetUID()
+        {
+            return Ok(new
+            {
+                AutoresController_Transient = servicioTransient.Guid,
+                ServicioA_Transient = servicio.ObtenerTransient(),
+                AutoresController_Scoped = servicioScoped.Guid,
+                ServicioA_Scoped = servicio.ObtenerScoped(),
+                AutoresController_Singleton = servicioSingleton.Guid,
+                ServicioA_Singleton = servicio.ObtenerSingleton()
+
+            });;
+        }
 
         [AllowAnonymous]
         [HttpGet("GetConfiguration")]

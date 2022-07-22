@@ -27,11 +27,12 @@ namespace WebApiAutores.DTOs.DTOHATEOAS
         }
         
         
+        
         public DatoHATEOAS(string enlace, string descripcion, string metodo)
         {
-            Enlace = enlace;
-            Descripcion = descripcion;
-            Metodo = metodo;
+            _Enlace = enlace;
+            _Descripcion = descripcion;
+            _Metodo = metodo;
         }
     }
 }

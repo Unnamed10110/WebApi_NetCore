@@ -82,11 +82,11 @@ namespace WebApiAutores
             //services.AddSingleton<IServicio, ServicioA>();
 
 
-            //services.AddTransient<IServicio, ServicioA>();
+            services.AddTransient<IServicio, ServicioA>();
             //// ejemplos de los tiempos de vida transient, scoped y singleton
-            //services.AddTransient<ServicioTransient>();
-            //services.AddScoped<ServicioScoped>();
-            //services.AddSingleton<ServicioSingleton>();
+            services.AddTransient<ServicioTransient>();
+            services.AddScoped<ServicioScoped>();
+            services.AddSingleton<ServicioSingleton>();
 
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(c =>
