@@ -5,11 +5,27 @@ namespace WebApiAutores.DTOs.DTOHATEOAS
     [Serializable]
     public class DatoHATEOAS
     {
-        public string Enlace { get; private set; }
+        private string _Enlace;
+        public string Enlace
+        {
+            get { return _Enlace; }
+            set { _Enlace = value; }
+        }
 
-        public string Descripcion { get; private set; }
+        private string _Descripcion;
+        public string Descripcion
+        {
+            get { return _Descripcion; }
+            set { _Descripcion = value; }
+        }
 
-        public string Metodo { get; private set; }
+        private string _Metodo;
+        public string Metodo
+        {
+            get { return _Metodo; }
+            set { _Metodo  = value; }
+        }
+        
         
         public DatoHATEOAS(string enlace, string descripcion, string metodo)
         {
