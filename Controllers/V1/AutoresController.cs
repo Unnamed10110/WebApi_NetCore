@@ -72,7 +72,7 @@ namespace WebApiAutores.Controllers.V1
                 AutoresController_Singleton = servicioSingleton.Guid,
                 ServicioA_Singleton = servicio.ObtenerSingleton()
 
-            });;
+            });
         }
 
         [AllowAnonymous]
