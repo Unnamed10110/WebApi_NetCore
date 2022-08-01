@@ -210,6 +210,7 @@ namespace WebApiAutores.Controllers.V1
 
         [HttpPost(Name = "crearAutorv1")]
         [AllowAnonymous]
+        [ServiceFilter(typeof(HATEOASAutorFilterAttribute))]
         public async Task<ActionResult> Post([FromForm] AutorCreacionDTO autorCreacionDTO)
         {
             var existeAutorMismoNombre = await context.Autores.AnyAsync(x => x.Nombre == autorCreacionDTO.NombreCompleto);

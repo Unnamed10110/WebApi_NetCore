@@ -37,7 +37,7 @@ public class LoguearRespuestaHTTPMiddleware
                 await ms.CopyToAsync(cuerpoOriginalRespuesta);
                 contexto.Response.Body = cuerpoOriginalRespuesta;
 
-                logger.LogInformation(respuesta);
+                logger.LogInformation(respuesta+ "\n -------->> Log from LoguearRespuestaHTTP Middleware! <<--------");
             }
         }
     }

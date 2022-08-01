@@ -13,8 +13,9 @@ namespace WebApiAutores.Filtros
 
         public override void OnException(ExceptionContext context)
         {
-            logger.LogError(context.Exception, context.Exception.Message);
+            logger.LogError(context.Exception, context.Exception.Message+ "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             base.OnException(context);
+            
         }
     }
 }
