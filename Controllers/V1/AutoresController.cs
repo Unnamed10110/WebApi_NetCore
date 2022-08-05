@@ -77,14 +77,51 @@ namespace WebApiAutores.Controllers.V1
 
         [AllowAnonymous]
         [HttpGet("GetConfiguration")]
-        public ActionResult<string> ObtenerConfiguracion()
+        public async Task<ActionResult<List<object>>> ObtenerConfiguracionANDAnonymousObject()
         {
 
-            return configuration["env_var"].ToString();
+            //return configuration["env_var"].ToString();
             //return configuration["connectionstrings:ConexionSQL"].ToString();
 
+            //var data= context.Libros
+            //    .Join(
+            //        context.Comentarios,
+            //        libro => libro.Id,
+            //        comentario => comentario.LibroId,
+            //        (libro, comentario) => new
+            //        {
+            //            IdLibro=libro.Id,
+            //            Libro= libro.Titulo,
+            //            IdComentario=comentario.Id,
+            //            Comentario= comentario.Contenido,   
+            //        }
+            //    ).ToList();
 
+            var listaLibroComentario = new List<object>();
+            var aux = context.Libros.AsEnumerable();
+
+
+            foreach (var libro in aux)
+            {
+                var comentarioslista = context.Comentarios.Where(x => x.LibroId == libro.Id).Select(a => new
+                {
+                    IdComentario = a.Id,
+                    Comentario = a.Contenido
+                });
+                
+                listaLibroComentario.Add(new
+                {
+                    Libro = libro.Id,
+                    Titulo = libro.Titulo,
+                    Comentarios = comentarioslista
+                });
+
+            }
+
+            return Ok(listaLibroComentario);
         }
+
+       
 
         /// <summary>
         /// Obtiene los autores
