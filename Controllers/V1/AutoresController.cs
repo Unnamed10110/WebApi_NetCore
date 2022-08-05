@@ -77,7 +77,7 @@ namespace WebApiAutores.Controllers.V1
 
         [AllowAnonymous]
         [HttpGet("GetConfiguration")]
-        public async Task<ActionResult<List<object>>> ObtenerConfiguracionANDAnonymousObject()
+        public ActionResult<List<object>> ObtenerConfiguracionANDAnonymousObject()
         {
 
             //return configuration["env_var"].ToString();
