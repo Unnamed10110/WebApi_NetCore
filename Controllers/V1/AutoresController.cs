@@ -101,6 +101,8 @@ namespace WebApiAutores.Controllers.V1
             var aux = context.Libros.AsEnumerable();
 
 
+
+
             foreach (var libro in aux)
             {
                 var comentarioslista = context.Comentarios.Where(x => x.LibroId == libro.Id).Select(a => new
