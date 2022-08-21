@@ -43,9 +43,18 @@ namespace WebApiAutores.Controllers.V1
         private readonly string contenedor = "autores";
 
         // inyeccion de dependencias
-        public AutoresController(ApplicationDbContext context, IMapper mapper, IConfiguration configuration,
-            IAuthorizationService authorizationService, IWebHostEnvironment env, AlmacenadorArchivosLocal almacenadorArchivosLocal, ServicioTransient servicioTransient,
-            ServicioScoped servicioScoped, ServicioSingleton servicioSingleton, IServicio servicio)
+        public AutoresController
+        (   ApplicationDbContext context, 
+            IMapper mapper, 
+            IConfiguration configuration,
+            IAuthorizationService authorizationService, 
+            IWebHostEnvironment env, 
+            AlmacenadorArchivosLocal almacenadorArchivosLocal, 
+            ServicioTransient servicioTransient,
+            ServicioScoped servicioScoped, 
+            ServicioSingleton servicioSingleton, 
+            IServicio servicio
+            )
         {
             this.context = context;
             this.mapper = mapper;
@@ -83,25 +92,8 @@ namespace WebApiAutores.Controllers.V1
             //return configuration["env_var"].ToString();
             //return configuration["connectionstrings:ConexionSQL"].ToString();
 
-            //var data= context.Libros
-            //    .Join(
-            //        context.Comentarios,
-            //        libro => libro.Id,
-            //        comentario => comentario.LibroId,
-            //        (libro, comentario) => new
-            //        {
-            //            IdLibro=libro.Id,
-            //            Libro= libro.Titulo,
-            //            IdComentario=comentario.Id,
-            //            Comentario= comentario.Contenido,   
-            //        }
-            //    ).ToList();
-
             var listaLibroComentario = new List<object>();
             var aux = context.Libros.AsEnumerable();
-
-
-
 
             foreach (var libro in aux)
             {
