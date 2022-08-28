@@ -50,6 +50,7 @@ namespace WebApiAutores
             services.AddControllers(opciones =>
             {
                 opciones.Filters.Add(typeof(FiltroDeExcepcion));
+                
                 opciones.Conventions.Add(new SwaggerAgrupaPorVersion());
             }).AddJsonOptions(x =>
             {
@@ -239,6 +240,8 @@ namespace WebApiAutores
 
             services.AddTransient<AlmacenadorArchivosLocal>();
             services.AddHttpContextAccessor();
+
+            services.AddTransient<MiFiltroDeAccion>();
 
 
         }

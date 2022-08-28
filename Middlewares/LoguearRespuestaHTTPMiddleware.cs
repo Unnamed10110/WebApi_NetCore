@@ -9,7 +9,7 @@
         }
     }
 
-public class LoguearRespuestaHTTPMiddleware
+    public class LoguearRespuestaHTTPMiddleware
     {
         private readonly RequestDelegate siguiente;
         private readonly ILogger<LoguearRespuestaHTTPMiddleware> logger;
@@ -19,7 +19,6 @@ public class LoguearRespuestaHTTPMiddleware
             this.siguiente = siguiente;
             this.logger = logger;
         }
-
         // invoke o invokeAsync
         public async Task InvokeAsync(HttpContext contexto)
         {  
@@ -36,8 +35,12 @@ public class LoguearRespuestaHTTPMiddleware
 
                 await ms.CopyToAsync(cuerpoOriginalRespuesta);
                 contexto.Response.Body = cuerpoOriginalRespuesta;
-
-                logger.LogInformation(respuesta+ "\n -------->> Log from LoguearRespuestaHTTP Middleware! <<--------");
+                
+                if(!contexto.Request.Path.Value.ToString().Contains("/swagger/"))
+                {
+                    logger.LogInformation(respuesta + "\n -------->> Log from LoguearRespuestaHTTP Middleware! <<--------");
+                }
+                
             }
         }
     }

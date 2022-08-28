@@ -69,6 +69,7 @@ namespace WebApiAutores.Controllers.V1
         }
 
         [AllowAnonymous]
+        [ServiceFilter(typeof(MiFiltroDeAccion))] // filtro de accion
         [HttpGet("/api/v1/autores/GUID")]
         public ActionResult GetUID()
         {
