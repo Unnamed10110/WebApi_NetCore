@@ -19,6 +19,7 @@ namespace WebApiAutores.Filtros
         }
         public void OnActionExecuted(ActionExecutedContext context)
         {
+
             logger.LogInformation("Despues de ejecutar la accion");
             if (context.HttpContext.Request.Method.ToString() == "GET")
             {

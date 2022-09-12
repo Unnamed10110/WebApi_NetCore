@@ -22,12 +22,15 @@
         // invoke o invokeAsync
         public async Task InvokeAsync(HttpContext contexto)
         {  
+            
             // guarda en logs todas las repuestas de cada controlador
             using (var ms = new MemoryStream())
             {
                 var cuerpoOriginalRespuesta = contexto.Response.Body;
                 contexto.Response.Body = ms;
-                await siguiente(contexto);
+                // before middleware
+                await siguiente(contexto);//+++++++++++++++++++++++++++++++++
+                // after middleware
 
                 ms.Seek(0, SeekOrigin.Begin);
                 string respuesta = new StreamReader(ms).ReadToEnd();

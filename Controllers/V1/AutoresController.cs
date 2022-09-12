@@ -15,6 +15,7 @@ using WebApiAutores.Utilidades.HATEOAS;
 using WebApiAutores.Utilidades.Paginacion;
 using WebApiAutores.DTOs.DTOPaginacion;
 using WebApiAutores.Utilidades.HEADERS;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 // mensajes de error-> Tipos:
 // Critical - Error - Warning - Information - Debug - Trace
@@ -69,7 +70,18 @@ namespace WebApiAutores.Controllers.V1
         }
 
         [AllowAnonymous]
-        [ServiceFilter(typeof(MiFiltroDeAccion))] // filtro de accion
+        [HttpGet("variosids")]
+        public List<AutorDTO> GetIds([FromQuery] List<int> ids)
+        {
+            var autores = context.Autores.Where(x => ids.Contains(x.Id));
+            var lst = mapper.Map<List<AutorDTO>>(autores);
+
+            return lst;
+        }
+
+
+        [AllowAnonymous]
+        [ServiceFilter(typeof(MiFiltroDeAccion),Order =1)] // filtro de accion
         [HttpGet("/api/v1/autores/GUID")]
         public ActionResult GetUID()
         {
