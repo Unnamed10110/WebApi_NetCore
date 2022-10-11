@@ -246,7 +246,7 @@ namespace WebApiAutores
 
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger<Startup> logger)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger <Startup> logger)
         {
             if (logger is null)
             {
