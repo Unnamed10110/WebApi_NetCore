@@ -16,6 +16,8 @@ namespace WebApiAutores.Controllers.V1
         public async Task<ActionResult<List<AutorDTO>>> SOAP_Service()
         {
             var ws = new Soap_Service_1.Service2Client();
+            var ws2=new Soap_Service_1.AutorDTO();
+            
 
             var result = await ws.ListAutoresAsync();
 
