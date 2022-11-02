@@ -16,6 +16,8 @@ using WebApiAutores.Utilidades.Paginacion;
 using WebApiAutores.DTOs.DTOPaginacion;
 using WebApiAutores.Utilidades.HEADERS;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using WebApiAutores.Utilidades.CustomExceptions;
+using Newtonsoft.Json;
 
 // mensajes de error-> Tipos:
 // Critical - Error - Warning - Information - Debug - Trace
@@ -67,6 +69,13 @@ namespace WebApiAutores.Controllers.V1
             this.servicioScoped = servicioScoped;
             this.servicioSingleton = servicioSingleton;
             this.servicio = servicio;
+        }
+
+        [HttpGet("MyException")]
+        [AllowAnonymous]
+        public ActionResult GetExcepcion()
+        {
+            throw new MyException("Error forzado para probar exception personalizada y filtro");
         }
 
         [AllowAnonymous]
@@ -383,59 +392,122 @@ namespace WebApiAutores.Controllers.V1
 
         }
 
+        [HttpGet("GetNoEFSerialized")]
+        [AllowAnonymous]
+        public async Task<ActionResult> GetNoEFSerialized()
+        {
+            //var resultado = new List<AutorDTO>();
+            var connString = "Server=localhost;Port=5432;Database=WebApiAutores;User Id=postgres;Password=634510;";
+
+            await using var conn = new NpgsqlConnection(connString);
+            await conn.OpenAsync();
+
+            var query = "SELECT * FROM public.\"Autores\"";
+
+            var values = new List<Dictionary<string, object>>(); // "tabla"
+
+
+            await using (var cmd = new NpgsqlCommand(query, conn))
+            await using (var reader = await cmd.ExecuteReaderAsync())
+            {
+                while (await reader.ReadAsync())
+                {
+                    // define the dictionary
+                    var fieldValues = new Dictionary<string, object>();
+
+                    // fill up each column and values on the dictionary                 
+                    for (int i = 0; i < reader.FieldCount; i++)
+                    {
+                        fieldValues.Add(reader.GetName(i), reader[i]);
+                    }
+
+                    // add the dictionary on the values list
+                    values.Add(fieldValues);
+                }
+            }
+            var resultado = JsonConvert.SerializeObject(values,Formatting.Indented);
+            return Ok(resultado);
+            
+        }
+
+
         [HttpPost("PostNoEF")]
+        [AllowAnonymous]
         public async Task<ActionResult> PostNoEF([FromBody] AutorCreacionDTO autorCreacionDTO)
         {
             var connString = "Server=localhost;Port=5432;Database=WebApiAutores;User Id=postgres;Password=634510;";
-            await using var conn = new NpgsqlConnection(connString);
-            await conn.OpenAsync();
-
-            var query = "select add_autor_func(null,\'" + autorCreacionDTO.NombreCompleto + "\');";
 
 
-            await using (var cmd = new NpgsqlCommand(query, conn))
-            await using (var reader = await cmd.ExecuteReaderAsync())
+            await using (var conn = new NpgsqlConnection(connString))
+            {
+                await conn.OpenAsync();
+
+                var transaction = conn.BeginTransaction();
+
+                var query = "select add_autor_func(null,\'" + autorCreacionDTO.NombreCompleto + "\');";
 
 
 
-                return Ok();
+                await using (var cmd = new NpgsqlCommand(query, conn, transaction))
+                {
+                    await using (var reader = await cmd.ExecuteReaderAsync()) ;
+                }
+
+                //throw new MyException("Error forzado para probar transaccion");
+
+                //transaction.RollbackAsync();
+
+                transaction.Commit();
+
+            }
+
+            return Ok();
         }
 
         [HttpPut("PutNoEF")]
+        [AllowAnonymous]
         public async Task<ActionResult> PutNoEF([FromBody] AutorDTO autorDTO)
         {
             var connString = "Server=localhost;Port=5432;Database=WebApiAutores;User Id=postgres;Password=634510;";
-            await using var conn = new NpgsqlConnection(connString);
-            await conn.OpenAsync();
-
-            var query = "call update_autor_sp(" + autorDTO.Id + ",\'" + autorDTO.NombreCompleto + "\');";
-
-
-            await using (var cmd = new NpgsqlCommand(query, conn))
-            await using (var reader = await cmd.ExecuteReaderAsync())
+            await using (var conn = new NpgsqlConnection(connString))
+            {
+                await conn.OpenAsync();
+                var transaction = conn.BeginTransaction();
 
 
+                var query = "call update_autor_sp(" + autorDTO.Id + ",\'" + autorDTO.NombreCompleto + "\');";
 
-                return Ok();
+
+                await using (var cmd = new NpgsqlCommand(query, conn, transaction))
+                {
+                    await using (var reader = await cmd.ExecuteReaderAsync()) ;
+                }
+
+
+                //transaction.RollbackAsync();
+
+                await transaction.CommitAsync();
+            }
+            
+
+            return Ok();
         }
 
         [HttpDelete("DeleteNoEF/{id:int}")]
         public async Task<ActionResult> DeleteNoEF(int id)
         {
             var connString = "Server=localhost;Port=5432;Database=WebApiAutores;User Id=postgres;Password=634510;";
-            await using var conn = new NpgsqlConnection(connString);
-            await conn.OpenAsync();
+            await using (var conn = new NpgsqlConnection(connString))
+            {
+                await conn.OpenAsync();
 
-            var query = "delete from public.\"Autores\" where public.\"Autores\".\"Id\" =" + id + ";";
+                var query = "delete from public.\"Autores\" where public.\"Autores\".\"Id\" =" + id + ";";
 
+                await using (var cmd = new NpgsqlCommand(query, conn))
+                await using (var reader = await cmd.ExecuteReaderAsync());
 
-
-            await using (var cmd = new NpgsqlCommand(query, conn))
-            await using (var reader = await cmd.ExecuteReaderAsync())
-
-
-
-                return Ok();
+            }
+            return Ok();
         }
     }
 }
