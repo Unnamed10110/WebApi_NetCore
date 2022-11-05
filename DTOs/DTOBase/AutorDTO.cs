@@ -12,7 +12,10 @@ namespace WebApiAutores.DTOs.DTOBase
 
         public string Imagen { get; set; }
 
-
+        public static implicit operator AutorDTO(string v)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 

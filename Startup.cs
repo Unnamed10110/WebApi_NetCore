@@ -2,12 +2,14 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Reflection;
@@ -92,6 +94,12 @@ namespace WebApiAutores
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(c =>
             {
+                // openapi service reference config.
+                c.CustomOperationIds(a =>
+                {
+                return a.TryGetMethodInfo(out MethodInfo methodInfo) ? methodInfo.Name : null;
+                });
+
                 // para los comentarios en el swagger
                 var archivoXML = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var rutaXML = Path.Combine(AppContext.BaseDirectory, archivoXML);
@@ -243,6 +251,8 @@ namespace WebApiAutores
 
             services.AddTransient<MiFiltroDeAccion>();
 
+            services.AddHttpClient();
+
 
         }
 
@@ -272,6 +282,9 @@ namespace WebApiAutores
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebApiAutores v1");
                     c.SwaggerEndpoint("/swagger/v2/swagger.json", "WebApiAutores v2");
+
+                    // show operation id
+                    c.DisplayOperationId();
                 });
             }
 

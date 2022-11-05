@@ -182,9 +182,9 @@ namespace WebApiAutores.Controllers.V1
             //return mapper.Map<List<AutorDTO>>(autores.OrderBy(x => x.Id).ToList());
 
             // paginacion
-            var queryable = context.Autores.AsQueryable();
+            var queryable = context.Autores.AsQueryable().OrderBy(x=>x.Id);
             await HttpContext.InsertarParametrosPaginacionEnCabecera(queryable);
-            var autores = await queryable.OrderBy(autor => autor.Nombre).Paginar(paginacionDTO).ToListAsync();
+            var autores = await queryable.OrderBy(x=>x.Id).Paginar(paginacionDTO).ToListAsync();
             return mapper.Map<List<AutorDTO>>(autores);
 
 
