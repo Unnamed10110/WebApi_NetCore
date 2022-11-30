@@ -15,8 +15,8 @@
         {
             if (ruta != null)
             {
-                var nombreArchivo = Path.GetFileName(ruta);
-                string directorioArchivo = Path.Combine(env.WebRootPath, contenedor, nombreArchivo);
+                var nombreArchivo = System.IO.Path.GetFileName(ruta);
+                string directorioArchivo = System.IO.Path.Combine(env.WebRootPath, contenedor, nombreArchivo);
 
                 if (File.Exists(directorioArchivo))
                 {
@@ -37,18 +37,18 @@
         public async Task<string> GuardarArchivo(byte[] contenido, string extension, string contenedor, string contentType)
         {
             var nombreArchivo = $"{Guid.NewGuid()}{extension}";
-            string folder = Path.Combine(env.WebRootPath, contenedor);
+            string folder = System.IO.Path.Combine(env.WebRootPath, contenedor);
 
             if (!Directory.Exists(folder))
             {
                 Directory.CreateDirectory(folder);
             }
 
-            string ruta = Path.Combine(folder, nombreArchivo);
+            string ruta = System.IO.Path.Combine(folder, nombreArchivo);
             await File.WriteAllBytesAsync(ruta, contenido);
 
             var urlActual = $"{httpContextAccessor.HttpContext.Request.Scheme}://{httpContextAccessor.HttpContext.Request.Host}";
-            var urlParaBD = Path.Combine(urlActual, contenedor, nombreArchivo).Replace("\\", "/");
+            var urlParaBD = System.IO.Path.Combine(urlActual, contenedor, nombreArchivo).Replace("\\", "/");
             return urlParaBD;
         }
     }

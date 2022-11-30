@@ -18,6 +18,7 @@ using WebApiAutores.Utilidades.HEADERS;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using WebApiAutores.Utilidades.CustomExceptions;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 // mensajes de error-> Tipos:
 // Critical - Error - Warning - Information - Debug - Trace
@@ -292,7 +293,7 @@ namespace WebApiAutores.Controllers.V1
                 {
                     await autorCreacionDTO.Imagen.CopyToAsync(memoryStream);
                     var contenido = memoryStream.ToArray();
-                    var extension = Path.GetExtension(autorCreacionDTO.Imagen.FileName);
+                    var extension = System.IO.Path.GetExtension(autorCreacionDTO.Imagen.FileName);
                     autor.Imagen = await almacenadorArchivosLocal.GuardarArchivo(contenido, extension, contenedor, autorCreacionDTO.Imagen.ContentType);
                 }
             }
@@ -335,7 +336,7 @@ namespace WebApiAutores.Controllers.V1
                 {
                     await autorDTOPut.Imagen.CopyToAsync(memoryStream);
                     var contenido = memoryStream.ToArray();
-                    var extension = Path.GetExtension(autorDTOPut.Imagen.FileName);
+                    var extension =     System.IO.Path.GetExtension(autorDTOPut.Imagen.FileName);
                     autor2.Imagen = await almacenadorArchivosLocal.GuardarArchivo(contenido, extension, contenedor, autorDTOPut.Imagen.ContentType);
                 }
             }
@@ -403,7 +404,7 @@ namespace WebApiAutores.Controllers.V1
             await conn.OpenAsync();
 
             var query = "SELECT * FROM public.\"Autores\"";
-
+            
             var values = new List<Dictionary<string, object>>(); // "tabla"
 
 
@@ -421,14 +422,25 @@ namespace WebApiAutores.Controllers.V1
                         fieldValues.Add(reader.GetName(i), reader[i]);
                     }
 
+                    
                     // add the dictionary on the values list
                     values.Add(fieldValues);
                 }
             }
-            var resultado = JsonConvert.SerializeObject(values,Formatting.Indented);
-            return Ok(resultado);
+
+            var resultado = JsonConvert.SerializeObject(values,Formatting.Indented); // serializar a json el listado de dictionaries
+
+
+            var res3=values.OrderBy(x => x.ContainsKey("Id")? x["Id"] : string.Empty); // ordenar  el resultado (list of dictionaries) fuera de la db
+
+            return Ok(res3);
             
         }
+
+
+
+
+
 
 
         [HttpPost("PostNoEF")]

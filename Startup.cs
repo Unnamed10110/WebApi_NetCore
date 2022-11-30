@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -18,11 +20,13 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using WebApiAutores.Controllers;
 using WebApiAutores.Filtros;
+using WebApiAutores.GraphQL;
 using WebApiAutores.Middlewares;
 using WebApiAutores.Servicios;
 using WebApiAutores.Utilidades;
 using WebApiAutores.Utilidades.HATEOAS;
 using WebApiAutores.Utilidades.HEADERS;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace WebApiAutores
@@ -102,7 +106,7 @@ namespace WebApiAutores
 
                 // para los comentarios en el swagger
                 var archivoXML = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var rutaXML = Path.Combine(AppContext.BaseDirectory, archivoXML);
+                var rutaXML = System.IO.Path.Combine(AppContext.BaseDirectory, archivoXML);
                 c.IncludeXmlComments(rutaXML);
 
 
@@ -254,10 +258,32 @@ namespace WebApiAutores
             services.AddHttpClient();
 
 
+
+            //------------------------------------------------------------------
+            //------------------------------------------------------------------
+            //------------------------------------------------------------------
+            // graphQl Section
+            services.AddScoped<IProductProvider, ProductProvider>();
+            services.AddScoped<IAutoresProvider, AutoresProvider>();
+            
+
+            services.AddScoped<AutoresQuery>().AddScoped<ProductQuery>()
+                .AddGraphQLServer()
+                .AddQueryType(q => q.Name("Queries"))
+                .AddType<AutoresQuery>()
+                .AddType<ProductQuery>()
+                .AddProjections().AddFiltering().AddSorting() // nugget hotchocolate.data.entifyframework
+                .ModifyRequestOptions(x=>x.IncludeExceptionDetails=true)
+                ;
+
+
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILogger <Startup> logger)
         {
+            
+            
             if (logger is null)
             {
                 throw new ArgumentNullException(nameof(logger));
@@ -265,6 +291,7 @@ namespace WebApiAutores
             //app.UseMiddleware<LoguearRespuestaHTTPMiddleware>();
             app.UseLoguearRespuestaHTTP();
 
+            
 
             //app.Map("/ruta1", app =>
             //{
@@ -286,8 +313,11 @@ namespace WebApiAutores
                     // show operation id
                     c.DisplayOperationId();
                 });
+
+                
             }
 
+            
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -301,7 +331,11 @@ namespace WebApiAutores
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapGraphQL("/graphql");
             });
+
+            
+
         }
 
 

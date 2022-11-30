@@ -238,22 +238,22 @@ namespace WebApiAutores.Controllers.V2
                 {
                     await autorCreacionDTO.Imagen.CopyToAsync(memoryStream);
                     var contenido = memoryStream.ToArray();
-                    var extension = Path.GetExtension(autorCreacionDTO.Imagen.FileName);
+                    var extension = System.IO.Path.GetExtension(autorCreacionDTO.Imagen.FileName);
 
                     var nombreArchivo = $"{Guid.NewGuid()}{extension}";
-                    string folder = Path.Combine(env.WebRootPath, "autores");
+                    string folder = System.IO.Path.Combine(env.WebRootPath, "autores");
 
                     if (!Directory.Exists(folder))
                     {
                         Directory.CreateDirectory(folder);
                     }
 
-                    string ruta = Path.Combine(folder, nombreArchivo);
+                    string ruta = System.IO.Path.Combine(folder, nombreArchivo);
                     //await File.WriteAllBytesAsync(ruta, contenido);
                     await autorCreacionDTO.Imagen.CopyToAsync(new FileStream(ruta, FileMode.Create));
 
                     var urlActual = $"{httpContextAccessor.HttpContext.Request.Scheme}://{httpContextAccessor.HttpContext.Request.Host}";
-                    var urlParaBD = Path.Combine(urlActual, "autores", nombreArchivo).Replace("\\", "/");
+                    var urlParaBD = System.IO.Path.Combine(urlActual, "autores", nombreArchivo).Replace("\\", "/");
                     autor.Imagen = urlParaBD;
 
                 }
@@ -298,22 +298,22 @@ namespace WebApiAutores.Controllers.V2
                 {
                     await autorDTOPut.Imagen.CopyToAsync(memoryStream);
                     var contenido = memoryStream.ToArray();
-                    var extension = Path.GetExtension(autorDTOPut.Imagen.FileName);
+                    var extension = System.IO.Path.GetExtension(autorDTOPut.Imagen.FileName);
 
                     var nombreArchivo = $"{Guid.NewGuid()}{extension}";
-                    string folder = Path.Combine(env.WebRootPath, "autores");
+                    string folder = System.IO.Path.Combine(env.WebRootPath, "autores");
 
                     if (!Directory.Exists(folder))
                     {
                         Directory.CreateDirectory(folder);
                     }
 
-                    string ruta = Path.Combine(folder, nombreArchivo);
+                    string ruta = System.IO.Path.Combine(folder, nombreArchivo);
                     //await File.WriteAllBytesAsync(ruta, contenido);
                     await autorDTOPut.Imagen.CopyToAsync(new FileStream(ruta, FileMode.Create));
 
                     var urlActual = $"{httpContextAccessor.HttpContext.Request.Scheme}://{httpContextAccessor.HttpContext.Request.Host}";
-                    var urlParaBD = Path.Combine(urlActual, "autores", nombreArchivo).Replace("\\", "/");
+                    var urlParaBD = System.IO.Path.Combine(urlActual, "autores", nombreArchivo).Replace("\\", "/");
                     autor2.Imagen = urlParaBD;
 
                 }

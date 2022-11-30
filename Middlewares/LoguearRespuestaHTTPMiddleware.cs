@@ -1,4 +1,6 @@
-﻿namespace WebApiAutores.Middlewares
+﻿using Newtonsoft.Json.Linq;
+
+namespace WebApiAutores.Middlewares
 {
     //clase estática para no exponer la clase del middleware en startup
     public static class LoguearRespuestaHTTPMiddlewareExtensions
@@ -26,6 +28,7 @@
             // guarda en logs todas las repuestas de cada controlador
             using (var ms = new MemoryStream())
             {
+                
                 var cuerpoOriginalRespuesta = contexto.Response.Body;
                 contexto.Response.Body = ms;
                 // before middleware
@@ -39,6 +42,7 @@
                 await ms.CopyToAsync(cuerpoOriginalRespuesta);
                 contexto.Response.Body = cuerpoOriginalRespuesta;
                 
+                //var res=JObject.Parse(respuesta);
                 if(!contexto.Request.Path.Value.ToString().Contains("/swagger/"))
                 {
                     logger.LogInformation(respuesta + "\n -------->> Log from LoguearRespuestaHTTP Middleware! <<--------");
