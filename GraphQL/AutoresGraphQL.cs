@@ -6,6 +6,8 @@ using WebApiAutores.DTOs.DTOPaginacion;
 using WebApiAutores.Entidades;
 using WebApiAutores.Utilidades.Paginacion;
 using HotChocolate;
+using static GraphQL.Instrumentation.Metrics;
+using WebApiAutores.Servicios;
 
 namespace WebApiAutores.GraphQL
 {
@@ -87,4 +89,6 @@ namespace WebApiAutores.GraphQL
         }
     }
 
+
+    
 }

@@ -41,7 +41,8 @@ namespace WebApiAutores.Utilidades.HATEOAS
             if (autorDTO == null)
             {
                 var autoresDTO = resultado.Value as List<AutorDTO> ??
-                    throw new ArgumentException("Se esperaba una instancia de AutorDTO o List<AutorDTO>");
+                    throw new Exception
+                    ("Se esperaba una instancia de AutorDTO o List<AutorDTO>");
 
                 autoresDTO.ForEach(async autor => await generadorEnlaces.GenerarEnlaces(autor,ver));
                 resultado.Value = autoresDTO;

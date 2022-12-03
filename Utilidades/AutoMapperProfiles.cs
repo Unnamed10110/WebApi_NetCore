@@ -21,10 +21,17 @@ namespace WebApiAutores.Utilidades
                 .ForMember(destino => destino.Nombre, origen => origen.MapFrom(s => s.NombreCompleto))
                 .ForMember(destino => destino.Nombre, origen => origen.MapFrom(c=>c.NombreCompleto));
 
+            CreateMap<AutorCreacionDTOGraphQL, Autor>()
+                .ForMember(destino => destino.Nombre, origen => origen.MapFrom(s => s.NombreCompleto))
+                .ForMember(destino => destino.Nombre, origen => origen.MapFrom(c => c.NombreCompleto));
+
             // PUT
             CreateMap<AutorDTOPUT, Autor>().ForMember(destino => destino.Nombre, origen => origen.MapFrom(s=>s.NombreCompleto));
 
-            
+            CreateMap<AutorDTOPUTGraphQL, Autor>().ForMember(destino => destino.Nombre, origen => origen.MapFrom(s => s.NombreCompleto)).ReverseMap();
+                                                  
+
+
             // LIBROS
             // GET libro
             CreateMap<Libro, LibroDTO>();

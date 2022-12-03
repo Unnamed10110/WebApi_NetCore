@@ -33,3 +33,27 @@ query {
     nombreCompleto
   }
 }
+
+---------------------------------------
+-- mutation
+mutation{
+  postAutor(autorCreacionDTO: {
+    nombreCompleto:"GraphQL_Mutation_Post_Autor"
+  }) {
+    id,
+    nombreCompleto,
+    imagen
+  }
+}
+
+-- mutation update
+
+mutation{
+  putAutor(input: {id:1,autorDTOPUTGraphQL:{nombreCompleto:"aa",imagen:"--"}}){
+    autorDTO {
+      id,
+      nombreCompleto,
+      imagen
+    }
+  }  
+}

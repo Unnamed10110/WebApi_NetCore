@@ -6,6 +6,7 @@ namespace WebApiAutores.Entidades
 {
     public class Autor: IValidatableObject // IValidatableObject -> para validar en el modelo IValidatableObject
     {
+        
         public int Id { get; set; }
 
         [Required(ErrorMessage = "El campo {0} es obligatorio.")] //reglas de validacion por atributo

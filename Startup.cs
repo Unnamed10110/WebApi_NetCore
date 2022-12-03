@@ -1,4 +1,5 @@
 ﻿
+using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -265,16 +266,20 @@ namespace WebApiAutores
             // graphQl Section
             services.AddScoped<IProductProvider, ProductProvider>();
             services.AddScoped<IAutoresProvider, AutoresProvider>();
-            
 
-            services.AddScoped<AutoresQuery>().AddScoped<ProductQuery>()
-                .AddGraphQLServer()
+
+            services.AddScoped<AutoresQuery>().AddScoped<ProductQuery>();
+
+            services.AddGraphQLServer()
                 .AddQueryType(q => q.Name("Queries"))
                 .AddType<AutoresQuery>()
                 .AddType<ProductQuery>()
                 .AddProjections().AddFiltering().AddSorting() // nugget hotchocolate.data.entifyframework
+                .AddMutationType<MutationsAutores>()
+                .AddMutationConventions(applyToAllMutations: true)
                 .ModifyRequestOptions(x=>x.IncludeExceptionDetails=true)
                 ;
+            services.AddErrorFilter<GraphQLErrorFilter>();
 
 
 
@@ -289,8 +294,9 @@ namespace WebApiAutores
                 throw new ArgumentNullException(nameof(logger));
             }
             //app.UseMiddleware<LoguearRespuestaHTTPMiddleware>();
-            app.UseLoguearRespuestaHTTP();
+            //app.UseLoguearRespuestaHTTP();
 
+            
             
 
             //app.Map("/ruta1", app =>
@@ -313,6 +319,7 @@ namespace WebApiAutores
                     // show operation id
                     c.DisplayOperationId();
                 });
+                
 
                 
             }
@@ -327,7 +334,7 @@ namespace WebApiAutores
             //app.UseResponseCaching(); //utilizar cache
 
             app.UseAuthorization(); // utilizar autorizacion (middleware)
-
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
