@@ -57,3 +57,21 @@ mutation{
     }
   }  
 }
+
+-- mutation delete
+
+mutation{
+  deleteAutor(input: {id:39}) {
+    string
+  }
+}
+
+mutation{
+  deleteAutor(input: {id:36}) {
+    customResponse {
+      message
+    }
+  }
+}
+
+-----------------------------------------

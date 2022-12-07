@@ -487,11 +487,14 @@ namespace WebApiAutores.Controllers.V1
                 var transaction = conn.BeginTransaction();
 
 
-                var query = "call update_autor_sp(" + autorDTO.Id + ",\'" + autorDTO.NombreCompleto + "\');";
+                var query = "call update_autor_sp(@id,@nombre);";
 
+                
 
                 await using (var cmd = new NpgsqlCommand(query, conn, transaction))
                 {
+                    cmd.Parameters.AddWithValue("id", autorDTO.Id);
+                    cmd.Parameters.AddWithValue("nombre", autorDTO.NombreCompleto);
                     await using (var reader = await cmd.ExecuteReaderAsync()) ;
                 }
 
@@ -513,10 +516,14 @@ namespace WebApiAutores.Controllers.V1
             {
                 await conn.OpenAsync();
 
-                var query = "delete from public.\"Autores\" where public.\"Autores\".\"Id\" =" + id + ";";
+                var query = "delete from public.\"Autores\" where public.\"Autores\".\"Id\" =@id;";
 
                 await using (var cmd = new NpgsqlCommand(query, conn))
-                await using (var reader = await cmd.ExecuteReaderAsync());
+                {
+                    cmd.Parameters.AddWithValue("id", id);
+                    await using (var reader = await cmd.ExecuteReaderAsync()) ;
+                }
+                
 
             }
             return Ok();

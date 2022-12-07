@@ -90,7 +90,7 @@ namespace WebApiAutores.GraphQL
             await context.SaveChangesAsync();
             return autor2;
         }
-        public async Task<String> DeleteAutor([Service] ApplicationDbContext context, [Service] IMapper mapper, [Service] IHttpContextAccessor httpContextAccessor, int id)
+        public async Task<CustomResponse> DeleteAutor([Service] ApplicationDbContext context, [Service] IMapper mapper, [Service] IHttpContextAccessor httpContextAccessor, int id)
         {
             var existe = await context.Autores.AnyAsync(x => x.Id == id);
             if (!existe)
@@ -108,9 +108,18 @@ namespace WebApiAutores.GraphQL
 
             var MessageDel = $"Deleted record with id:{id}";
            
+            var o = new CustomResponse();
 
-            return MessageDel;
+            o.Message = $"Deleted record with id:{id}";
 
+            return o;
+            //return MessageDel;
+
+        }
+
+        public class CustomResponse
+        {
+            public string Message{ get; set; }
         }
 
 
