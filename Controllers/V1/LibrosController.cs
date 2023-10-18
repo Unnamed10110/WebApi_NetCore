@@ -88,6 +88,7 @@ namespace WebApiAutores.Controllers.V1
         }
 
         [HttpPost(Name = "crearLibro")]
+        [AllowAnonymous]
         public async Task<ActionResult> Post([FromBody] LibroCreacionDTO libroCreacionDTO)
         {
             //var existeAutor = await context.Autores.AnyAsync(x => x.Id == libro.AutorId);

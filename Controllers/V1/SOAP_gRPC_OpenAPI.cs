@@ -44,7 +44,7 @@ namespace WebApiAutores.Controllers.V1
 
 
         [HttpGet("grpc", Name = "grpc_service")]
-        public async Task<ActionResult<List<AutorDTO>>> Grpc_Service()
+        public  Task<ActionResult<List<AutorDTO>>> Grpc_Service()
         {
 
             //------------------------------------------------------
